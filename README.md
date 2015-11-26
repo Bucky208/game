@@ -1,5 +1,7 @@
-# Roumtekoerier
+# Ruimtekoerier
 ## Spel omschrijving
+### De eerste vlucht
+In je eerste missie moet je voorwerpen die op je afkomen ontwijken, hier leer je de controls en het spel kennen. Pas daarna heb je toegang tot alle features.
 ### Raket samenstellen
 Stel je raket samen door middel van upgrades en modules te kiezen, je mag er maximum 3 selecteren. Deze helpen je de reis te vergemakkelijken.
 ### Je missie
