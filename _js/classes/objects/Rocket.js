@@ -1,6 +1,6 @@
-export default class Car extends Phaser.Sprite {
+export default class Rocket extends Phaser.Sprite {
   constructor(game, x, y, frame) {
-    super(game, x, y, 'player_straight', frame);
+    super(game, x, y, 'raket', frame);
 
     this.anchor.setTo(0.5, 0.5);
 

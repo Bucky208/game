@@ -1,14 +1,13 @@
-'use strict';
+import Preload from './classes/states/Preload';
+import Intro from './classes/states/Intro';
 
-// some features need the be polyfilled..
-// https://babeljs.io/docs/usage/polyfill/
-
-// import 'babel-core/polyfill';
-// or import specific polyfills
-// import {$} from './helpers/util';
+let game;
 
 const init = () => {
-  console.log('Hello World Maxim De Groote');
+  game = new Phaser.Game(700, 700, Phaser.AUTO);
+  game.state.add('Preload', Preload, false);
+  game.state.add('Intro', Intro, false);
+  game.state.start('Preload');
 };
 
 init();
