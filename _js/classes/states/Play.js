@@ -44,7 +44,8 @@ export default class Play extends Phaser.State {
   }
 
   deadHandler() {
-    console.log("u bent dood");
+    this.gameoverButton = this.game.add.button(350, 500, 'gameover', this.goClick, this);
+    this.gameoverButton.anchor.setTo(0.5,0.5);
   }
 
   generateMeteoor() {
