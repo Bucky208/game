@@ -2,3 +2,4 @@
 .env
 npm-debug.log
 /bower_components
+webpack.config.js

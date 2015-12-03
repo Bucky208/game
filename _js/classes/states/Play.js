@@ -14,6 +14,7 @@ export default class Play extends Phaser.State {
     this.rocket = new Rocket(this.game, 350, 600);
     this.game.add.existing(this.rocket);
 
+
     this.cursors = this.game.input.keyboard.createCursorKeys();
   }
 
