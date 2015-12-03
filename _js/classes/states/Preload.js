@@ -7,6 +7,7 @@ export default class Preload extends Phaser.State {
     this.load.image('start', 'assets/start.png');
     this.load.image('meteoor', 'assets/meteoor.png');
     this.load.image('planeet', 'assets/planeet.png');
+    this.load.image('background_overlay', 'assets/bgoverlay.png');
     this.load.image('background', 'assets/bg.png');
 
     this.load.audio('rocket_launch', 'assets/sounds/launch.mp3');

@@ -1,6 +1,6 @@
-export default class Space extends Phaser.TileSprite {
+export default class Background extends Phaser.TileSprite {
   constructor(game, x, y, width, height) {
-    super(game, x, y, width, height, 'background_overlay');
+    super(game, x, y, width, height, 'background');
     this.game.physics.arcade.enableBody(this);
 
     this.body.allowGravity = false;
