@@ -3,3 +3,5 @@
 npm-debug.log
 /bower_components
 webpack.config.js
+.DS_Store
+_js/classes/.DS_Store
