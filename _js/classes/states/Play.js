@@ -28,6 +28,13 @@ export default class Play extends Phaser.State {
   }
 
   update() {
+    this.game.physics.arcade.collide(this.rocket, this.firstmeteoor, this.deadHandler, null, this);
+    this.game.physics.arcade.collide(this.rocket, this.secondmeteoor, this.deadHandler, null, this);
+    this.game.physics.arcade.collide(this.rocket, this.thirdmeteoor, this.deadHandler, null, this);
+    this.game.physics.arcade.collide(this.rocket, this.fourthmeteoor, this.deadHandler, null, this);
+    this.game.physics.arcade.collide(this.rocket, this.fivehmeteoor, this.deadHandler, null, this);
+    this.game.physics.arcade.collide(this.rocket, this.sixmeteoor, this.deadHandler, null, this);
+
     if(this.cursors.left.isDown) {
         this.rocket.body.velocity.x += -10;
     }
@@ -36,7 +43,11 @@ export default class Play extends Phaser.State {
     }
   }
 
-    generateMeteoor() {
+  deadHandler() {
+    console.log("u bent dood");
+  }
+
+  generateMeteoor() {
     this.space.destroy();
 
     this.meteoorY = this.game.rnd.integerInRange(0, 700);
