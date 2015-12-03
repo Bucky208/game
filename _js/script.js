@@ -1,3 +1,4 @@
+'use strict';
 import Preload from './classes/states/Preload';
 import Intro from './classes/states/Intro';
 import Play from './classes/states/Play';
@@ -13,3 +14,4 @@ const init = () => {
 };
 
 init();
+
