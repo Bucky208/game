@@ -2,6 +2,8 @@ import Background from '../objects/Background';
 import Rocket from '../objects/Rocket';
 import Space from '../objects/Space';
 
+let timer = 3, countDownText, timerEvent, countdown;
+
 export default class Intro extends Phaser.State {
   create() {
     this.bg = new Background(this.game, 0, 0, 700, 700);
@@ -17,6 +19,45 @@ export default class Intro extends Phaser.State {
     this.startButton.anchor.setTo(0.5,0.5);
   }
   goClick() {
-    this.game.state.start('Play');
-  }
+
+        this.startButton.destroy();
+
+
+        let countdown = this.game.add.audio('countdown');
+        countdown.onStop.add(this.soundStopped, this);
+        countdown.play();
+        timerEvent = this.time.events.loop(Phaser.Timer.SECOND, this.updateTimer, this);
+        countDownText = this.add.text(0, 100, timer, {
+            font: '65px Helvetica',
+            fill: '#DF882C',
+            align: 'center'
+        });
+        countDownText.scale.pageAlignHorizontally = true;
+        countDownText.anchor.setTo(0.5, 0);
+        countDownText.x = this.game.width/2;
+
+        this.game.add.tween(countDownText).to( { y: 245 }, 2400, Phaser.Easing.Bounce.Out, true);
+    }
+
+    updateTimer() {
+        timer -= 1;
+        if (timer === 0) {
+            countDownText.setText('GO');
+            this.game.add.tween(countDownText).to( { alpha: 0 }, 2000, "Linear", true);
+        } else {
+            countDownText.setText(timer);
+        }
+        if (timer < 0) {
+
+      this.game.time.events.remove(timerEvent);
+            this.game.state.start('Play');
+
+
+        }
+    }
+
+    soundStopped(sound) {
+
+
+    }
 }

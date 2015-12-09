@@ -1,7 +1,8 @@
 import Background from '../objects/Background';
-import Rocket from '../objects/Rocket';
 import Space from '../objects/Space';
 import Meteoor from '../objects/Meteoor';
+
+let dead = false;
 
 export default class Play extends Phaser.State {
   create() {
@@ -15,8 +16,9 @@ export default class Play extends Phaser.State {
     this.game.add.existing(this.space);
     this.space.autoScroll(0,200);
 
-    this.rocket = new Rocket(this.game, 350, 600);
-    this.game.add.existing(this.rocket);
+    this.rocket = this.game.add.sprite(350, 600, 'raket');
+    this.rocket.anchor.setTo(0.5, 0.5);
+    this.game.physics.arcade.enableBody(this.rocket);
 
     this.meteoorGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 1, this.generateMeteoor, this);
     this.meteoorGenerator.timer.start();
@@ -27,12 +29,33 @@ export default class Play extends Phaser.State {
     this.cursors = this.game.input.keyboard.createCursorKeys();
   }
 
+  deadHandler() {
+    this.startButton = this.game.add.button(350, 500, 'gameover', this.restart, this);
+    this.startButton.anchor.setTo(0.5,0.5);
+    dead = true;
+  }
+
+  restart() {
+    this.game.state.start('Play');
+  }
+
   update() {
-    if(this.cursors.left.isDown) {
+    this.game.physics.arcade.collide(this.rocket, this.firstmeteoor, this.deadHandler, null, this);
+    this.game.physics.arcade.collide(this.rocket, this.secondmeteoor, this.deadHandler, null, this);
+    this.game.physics.arcade.collide(this.rocket, this.thirdmeteoor, this.deadHandler, null, this);
+    this.game.physics.arcade.collide(this.rocket, this.fourthmeteoor, this.deadHandler, null, this);
+    this.game.physics.arcade.collide(this.rocket, this.fivehmeteoor, this.deadHandler, null, this);
+    this.game.physics.arcade.collide(this.rocket, this.sixmeteoor, this.deadHandler, null, this);
+
+    this.rocket.frame = 0;
+
+    if(this.cursors.left.isDown && !dead) {
         this.rocket.body.velocity.x += -10;
+        this.rocket.frame = 1;
     }
-    if(this.cursors.right.isDown){
+    if(this.cursors.right.isDown && !dead){
         this.rocket.body.velocity.x += 10;
+        this.rocket.frame = 2;
     }
   }
 
