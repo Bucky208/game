@@ -2,7 +2,7 @@ import Background from '../objects/Background';
 import Space from '../objects/Space';
 import Meteoor from '../objects/Meteoor';
 
-let dead = false;
+let dead = false, bg = true;
 
 export default class Play extends Phaser.State {
   create() {
@@ -14,7 +14,8 @@ export default class Play extends Phaser.State {
 
     this.space = new Space(this.game, 0, 0, 700, 700);
     this.game.add.existing(this.space);
-    this.space.autoScroll(0,200);
+    //this.space.autoScroll(0,200);
+
 
     this.rocket = this.game.add.sprite(350, 600, 'raket');
     this.rocket.anchor.setTo(0.5, 0.5);
@@ -41,6 +42,11 @@ export default class Play extends Phaser.State {
   }
 
   update() {
+
+    if(bg) {
+      this.space.body.y += 5;
+    }
+
     this.game.physics.arcade.collide(this.rocket, this.firstmeteoor, this.deadHandler, null, this);
     this.game.physics.arcade.collide(this.rocket, this.secondmeteoor, this.deadHandler, null, this);
     this.game.physics.arcade.collide(this.rocket, this.thirdmeteoor, this.deadHandler, null, this);
@@ -61,8 +67,6 @@ export default class Play extends Phaser.State {
   }
 
     generateMeteoor() {
-    this.space.destroy();
-
     this.meteoorY = this.game.rnd.integerInRange(0, 700);
     if(this.firstrun) {
       if(this.currentmeteoor == 0) {
@@ -77,6 +81,9 @@ export default class Play extends Phaser.State {
       } else if(this.currentmeteoor == 3) {
         this.fourthmeteoor = new Meteoor(this.game, this.meteoorY, -10, this.color);
         this.game.add.existing(this.fourthmeteoor);
+        //destroy space start bg
+        this.space.destroy();
+        bg = false;
       } else if(this.currentmeteoor == 4) {
         this.fivehmeteoor = new Meteoor(this.game, this.meteoorY, -10, this.color);
         this.game.add.existing(this.fivehmeteoor);
