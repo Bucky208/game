@@ -38,6 +38,7 @@ export default class Play extends Phaser.State {
 
   restart() {
     dead = false;
+    bg = true;
     this.game.state.start('Play');
   }
 
