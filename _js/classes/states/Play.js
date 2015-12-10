@@ -77,7 +77,6 @@ export default class Play extends Phaser.State {
     this.deadButton = this.game.add.button(350, 500, 'gameover', this.restart, this);
     this.deadButton.anchor.setTo(0.5,0.5);
     dead = true;
-    this.rocket.frame = 3;
   }
 
   restart() {
@@ -101,8 +100,11 @@ export default class Play extends Phaser.State {
       this.game.physics.arcade.collide(this.rocket, this.fivehmeteoor, this.deadHandler, null, this);
       this.game.physics.arcade.collide(this.rocket, this.sixmeteoor, this.deadHandler, null, this);
     }
-
-    this.rocket.frame = 0;
+    if(!dead) {
+      this.rocket.frame = 0;
+    } else {
+      this.rocket.frame = 3;
+    }
 
     if(this.cursors.left.isDown && !dead) {
         this.rocket.body.velocity.x += -10;

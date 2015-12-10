@@ -2,7 +2,7 @@ import Background from '../objects/Background';
 import Space from '../objects/Space';
 import Meteoor from '../objects/Meteoor';
 
-let dead = false, bg = true, planeet = false;
+let dead = false, bg = true, planeet = false, geland = false;
 
 export default class Play extends Phaser.State {
   create() {
@@ -47,25 +47,32 @@ export default class Play extends Phaser.State {
 
   geland() {
     this.rocket.body.moves = false;
+    geland = true;
   }
 
   update() {
-    //this.rocket.frame = 0;
+    if(!geland) {
+      this.rocket.frame = 0;
+    } else {
+      this.rocket.frame = 1;
+    }
     this.game.physics.arcade.collide(this.rocket, this.platform, this.geland, null, this);
 
     if(this.cursors.left.isDown) {
         this.rocket.body.velocity.x += -10;
-        //this.rocket.frame = 1;
+        this.rocket.frame = 2;
     }
     if(this.cursors.right.isDown){
         this.rocket.body.velocity.x += 10;
-        //this.rocket.frame = 2;
+        this.rocket.frame = 3;
     }
     if(this.cursors.up.isDown && !dead) {
         this.rocket.body.velocity.y += -10;
+        this.rocket.frame = 5;
     }
     if(this.cursors.down.isDown && !dead){
         this.rocket.body.velocity.y += 10;
+        this.rocket.frame = 4;
     }
   }
 }
