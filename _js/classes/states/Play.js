@@ -24,7 +24,11 @@ export default class Play extends Phaser.State {
     //this.space.autoScroll(0,200);
 
     //de raket
-    this.rocket = this.game.add.sprite(350, 600, 'raket');
+    if(this.game.boosts) {
+      this.rocket = this.game.add.sprite(350, 600, 'raketboosted');
+    } else {
+      this.rocket = this.game.add.sprite(350, 600, 'raket');
+    }
     this.rocket.anchor.setTo(0.5, 0.5);
     this.game.physics.arcade.enableBody(this.rocket);
 

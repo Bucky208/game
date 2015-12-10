@@ -11,6 +11,8 @@ export default class Preload extends Phaser.State {
     this.load.image('background', 'assets/bg.png');
     this.load.image('gameover', 'assets/gameover.png');
     this.load.image('bullet', 'assets/bullet.png');
+    this.load.image('update', 'assets/update.png');
+    this.load.image('noupdate', 'assets/noupdate.png');
 
     //spritesheets
     this.load.spritesheet('planeet', 'assets/planeet.png', 545, 386, 1);
@@ -24,6 +26,9 @@ export default class Preload extends Phaser.State {
     //audio
     this.load.audio('rocket_launch', 'assets/sounds/launch.mp3');
     this.load.audio('countdown', 'assets/sounds/countdown.mp3');
+
+    //vars
+    this.game.boosts = false;
   }
   create() {
   }

@@ -4,7 +4,7 @@ import Meteoor from '../objects/Meteoor';
 
 let dead = false, bg = true, planeet = false, geland = false;
 
-export default class Play extends Phaser.State {
+export default class Landing extends Phaser.State {
   create() {
     //Zelfde als play.....
     this.bg = new Background(this.game, 0, 0, 700, 700);
@@ -55,6 +55,12 @@ export default class Play extends Phaser.State {
     //yay we staan safe
     this.rocket.body.moves = false;
     geland = true;
+
+    this.game.time.events.add(Phaser.Timer.SECOND * 1, this.nextUpdate, this);
+  }
+
+  nextUpdate() {
+    this.game.state.start('Upgrade');
   }
 
   update() {
