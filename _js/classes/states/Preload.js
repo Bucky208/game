@@ -9,12 +9,14 @@ export default class Preload extends Phaser.State {
     this.load.image('background_overlay', 'assets/bgoverlay.png');
     this.load.image('background', 'assets/bg.png');
     this.load.image('gameover', 'assets/gameover.png');
+    this.load.image('bullet', 'assets/bullet.png');
 
     this.load.spritesheet('raket', 'assets/raketkleinsprite.png', 31, 80, 3);
     this.load.spritesheet('raketboosted', 'assets/raketkleinsprite.png', 31, 80, 3);
 
     this.load.audio('rocket_launch', 'assets/sounds/launch.mp3');
     this.load.audio('countdown', 'assets/sounds/countdown.mp3');
+
   }
   create() {
   }
