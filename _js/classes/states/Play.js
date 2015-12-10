@@ -3,6 +3,10 @@ import Space from '../objects/Space';
 import Meteoor from '../objects/Meteoor';
 
 let dead = false, bg = true, planeet = false;
+let bank,
+    bullets,
+    fire,
+    limitFire = 0;
 
 export default class Play extends Phaser.State {
   create() {
@@ -30,6 +34,16 @@ export default class Play extends Phaser.State {
 
     this.cursors = this.game.input.keyboard.createCursorKeys();
 
+    // schieten
+
+        bullets = this.game.add.group();
+        bullets.enableBody = true;
+        bullets.physicsBodyType = Phaser.Physics.ARCADE;
+        bullets.createMultiple(30, 'bullet');
+        bullets.setAll('anchor.x', 0.5);
+        bullets.setAll('anchor.y', 1);
+        bullets.setAll('outOfBoundsKill', true);
+        bullets.setAll('checkWorldBounds', true);
   }
 
   showPlaneet() {
@@ -92,6 +106,12 @@ export default class Play extends Phaser.State {
       this.space.body.y += 5;
     }
 
+    // links/rechts detectie
+    if (this.rocket.body.x < 0 || this.rocket.body.x > 700) {
+        this.rocket.body.velocity.x = 0;
+        this.deadHandler();
+    }
+
     if(!planeet) {
       this.game.physics.arcade.collide(this.rocket, this.firstmeteoor, this.deadHandler, null, this);
       this.game.physics.arcade.collide(this.rocket, this.secondmeteoor, this.deadHandler, null, this);
@@ -124,7 +144,35 @@ export default class Play extends Phaser.State {
           this.rocket.body.velocity.y += 10;
       }
     }
+
+    // zijwaards roteer effect
+    bank = this.rocket.body.velocity.x / 400;
+    this.rocket.scale.x = 1 - Math.abs(bank) / 2;
+    this.rocket.angle = bank * 5;
+
+    // Fire
+
+    fire = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+    if (fire.isDown) {
+        this.fireBullet();
+    }
   }
+
+
+    // Schiet bullets af
+    fireBullet() {
+    if (this.game.time.now > limitFire){
+      let bullet = bullets.getFirstExists(false);
+      if (bullet){
+           let bulletOffset = 20 * Math.sin(this.game.math.degToRad(this.rocket.angle));
+           bullet.reset(this.rocket.x + bulletOffset, this.rocket.y - 35);
+           bullet.angle = this.rocket.angle;
+           this.game.physics.arcade.velocityFromAngle(bullet.angle - 90, 400, bullet.body.velocity);
+           bullet.body.velocity.x += this.rocket.body.velocity.x;
+           limitFire = this.game.time.now + 150;
+        }
+     }
+    }
 
     generateMeteoor() {
     this.meteoorY = this.game.rnd.integerInRange(0, 700);
