@@ -3,6 +3,8 @@ export default class Preload extends Phaser.State {
 
     this.load.onLoadComplete.addOnce(this.onLoadComplete, this);
 
+    //alle assets preloaden
+    //images
     this.load.image('start', 'assets/start.png');
     this.load.image('meteoor', 'assets/meteoorklein.png');
     this.load.image('background_overlay', 'assets/bgoverlay.png');
@@ -10,6 +12,7 @@ export default class Preload extends Phaser.State {
     this.load.image('gameover', 'assets/gameover.png');
     this.load.image('bullet', 'assets/bullet.png');
 
+    //spritesheets
     this.load.spritesheet('planeet', 'assets/planeet.png', 545, 386, 1);
 
     this.load.spritesheet('raket', 'assets/raketkleinsprite.png', 31, 80);
@@ -18,6 +21,7 @@ export default class Preload extends Phaser.State {
 
     this.load.spritesheet('platform', 'assets/platform.png', 50, 8);
 
+    //audio
     this.load.audio('rocket_launch', 'assets/sounds/launch.mp3');
     this.load.audio('countdown', 'assets/sounds/countdown.mp3');
   }

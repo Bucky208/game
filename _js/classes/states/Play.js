@@ -10,90 +10,113 @@ let bank,
 
 export default class Play extends Phaser.State {
   create() {
+    //achtergrond
     this.bg = new Background(this.game, 0, 0, 700, 700);
     this.game.add.existing(this.bg);
 
+    //raketvertrekt geluid
     this.rocketSound = this.game.add.audio('rocket_launch');
     this.rocketSound.play();
 
+    //space elementen
     this.space = new Space(this.game, 0, 0, 700, 700);
     this.game.add.existing(this.space);
     //this.space.autoScroll(0,200);
 
+    //de raket
     this.rocket = this.game.add.sprite(350, 600, 'raket');
     this.rocket.anchor.setTo(0.5, 0.5);
     this.game.physics.arcade.enableBody(this.rocket);
 
+    //meteoren op het scherm plaatsen > itemer
     this.meteoorGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 1, this.generateMeteoor, this);
     this.meteoorGenerator.timer.start();
 
+    //voltooien van de basics
     this.game.time.events.add(Phaser.Timer.SECOND * 10, this.showPlaneet, this);
 
+    //parameters
     this.currentmeteoor = 0;
     this.firstrun = true;
 
+    //controls
     this.cursors = this.game.input.keyboard.createCursorKeys();
 
     // schieten
-
-        bullets = this.game.add.group();
-        bullets.enableBody = true;
-        bullets.physicsBodyType = Phaser.Physics.ARCADE;
-        bullets.createMultiple(30, 'bullet');
-        bullets.setAll('anchor.x', 0.5);
-        bullets.setAll('anchor.y', 1);
-        bullets.setAll('outOfBoundsKill', true);
-        bullets.setAll('checkWorldBounds', true);
+    bullets = this.game.add.group();
+    bullets.enableBody = true;
+    bullets.physicsBodyType = Phaser.Physics.ARCADE;
+    bullets.createMultiple(30, 'bullet');
+    bullets.setAll('anchor.x', 0.5);
+    bullets.setAll('anchor.y', 1);
+    bullets.setAll('outOfBoundsKill', true);
+    bullets.setAll('checkWorldBounds', true);
   }
 
   showPlaneet() {
-    this.planeet = this.game.add.sprite(350, 1000, 'planeet');
-    this.platform = this.game.add.sprite(350, 900, 'platform');
+    //als de user dood is doe niets extra meer
+    if(!dead) {
+      //planeet onder scherm plaatsen
+      this.planeet = this.game.add.sprite(350, 1000, 'planeet');
+      //platform onder scherm plaatsen
+      this.platform = this.game.add.sprite(350, 900, 'platform');
 
-    this.planeet.anchor.setTo(0.5, 0.5);
-    this.platform.anchor.setTo(0.5, 0.5);
+      //uitlijnen
+      this.planeet.anchor.setTo(0.5, 0.5);
+      this.platform.anchor.setTo(0.5, 0.5);
 
-    this.game.physics.arcade.enableBody(this.platform);
+      //movements
+      this.game.physics.arcade.enableBody(this.platform);
+      this.platform.body.moves = false;
 
-    this.platform.body.moves = false;
+      //ontop
+      this.rocket.bringToTop();
 
-    this.rocket.bringToTop();
+      //space elementen plaats herinstellen
+      this.space.body.x = 0;
+      this.space.body.y = -700;
+      this.space.revive();
 
-    this.space.body.x = 0;
-    this.space.body.y = -700;
-    this.space.revive();
+      //animaties
+      this.game.add.tween(this.space).to({x: 0, y: 0}, 1000, Phaser.Easing.Quadratic.InOut, true);
+      this.game.add.tween(this.planeet).to({x: 350, y: 400}, 1000, Phaser.Easing.Quadratic.InOut, true);
+      this.game.add.tween(this.platform).to({x: 350, y: 300}, 1000, Phaser.Easing.Quadratic.InOut, true);
+      this.game.add.tween(this.rocket).to({x: 350, y: 200}, 1000, Phaser.Easing.Quadratic.InOut, true);
+      this.game.add.tween(this.firstmeteoor).to({y: 800}, 800, Phaser.Easing.Quadratic.InOut, true);
+      this.game.add.tween(this.secondmeteoor).to({y: 800}, 800, Phaser.Easing.Quadratic.InOut, true);
+      this.game.add.tween(this.thirdmeteoor).to({y: 800}, 800, Phaser.Easing.Quadratic.InOut, true);
+      this.game.add.tween(this.fourthmeteoor).to({y: 800}, 800, Phaser.Easing.Quadratic.InOut, true);
+      this.game.add.tween(this.fivehmeteoor).to({y: 800}, 800, Phaser.Easing.Quadratic.InOut, true);
+      this.game.add.tween(this.sixmeteoor).to({y: 800}, 800, Phaser.Easing.Quadratic.InOut, true);
 
-    this.game.add.tween(this.space).to({x: 0, y: 0}, 1000, Phaser.Easing.Quadratic.InOut, true);
-    this.game.add.tween(this.planeet).to({x: 350, y: 400}, 1000, Phaser.Easing.Quadratic.InOut, true);
-    this.game.add.tween(this.platform).to({x: 350, y: 300}, 1000, Phaser.Easing.Quadratic.InOut, true);
-    this.game.add.tween(this.rocket).to({x: 350, y: 200}, 1000, Phaser.Easing.Quadratic.InOut, true);
-    this.game.add.tween(this.firstmeteoor).to({y: 800}, 800, Phaser.Easing.Quadratic.InOut, true);
-    this.game.add.tween(this.secondmeteoor).to({y: 800}, 800, Phaser.Easing.Quadratic.InOut, true);
-    this.game.add.tween(this.thirdmeteoor).to({y: 800}, 800, Phaser.Easing.Quadratic.InOut, true);
-    this.game.add.tween(this.fourthmeteoor).to({y: 800}, 800, Phaser.Easing.Quadratic.InOut, true);
-    this.game.add.tween(this.fivehmeteoor).to({y: 800}, 800, Phaser.Easing.Quadratic.InOut, true);
-    this.game.add.tween(this.sixmeteoor).to({y: 800}, 800, Phaser.Easing.Quadratic.InOut, true);
+      //platform animatie loop
+      var knipper = this.platform.animations.add('knipper');
+      this.platform.animations.play('knipper', 2, true);
 
-    var knipper = this.platform.animations.add('knipper');
-    this.platform.animations.play('knipper', 2, true);
+      //movement
+      this.game.physics.arcade.enableBody(this.planeet);
 
-    this.game.physics.arcade.enableBody(this.planeet);
 
-    planeet = true;
-    this.game.time.events.add(Phaser.Timer.SECOND * 1, this.landing, this);
+      //event binnen 1 sec
+      planeet = true;
+      this.game.time.events.add(Phaser.Timer.SECOND * 1, this.landing, this);
+    }
   }
 
   landing () {
+    //we gaan naar de planeet modus
     this.game.state.start('Landing');
   }
 
   deadHandler() {
+    //oeps je bent DOOD, show Gameover
     this.deadButton = this.game.add.button(350, 500, 'gameover', this.restart, this);
     this.deadButton.anchor.setTo(0.5,0.5);
     dead = true;
   }
 
   restart() {
+    //herstarten en herinstellen
     dead = false;
     bg = true;
     planeet = false;
@@ -101,7 +124,7 @@ export default class Play extends Phaser.State {
   }
 
   update() {
-
+    //achtergrond weg doen bij het starten
     if(bg) {
       this.space.body.y += 5;
     }
@@ -112,6 +135,7 @@ export default class Play extends Phaser.State {
         this.deadHandler();
     }
 
+    //collisions
     if(!planeet) {
       this.game.physics.arcade.collide(this.rocket, this.firstmeteoor, this.deadHandler, null, this);
       this.game.physics.arcade.collide(this.rocket, this.secondmeteoor, this.deadHandler, null, this);
@@ -120,12 +144,15 @@ export default class Play extends Phaser.State {
       this.game.physics.arcade.collide(this.rocket, this.fivehmeteoor, this.deadHandler, null, this);
       this.game.physics.arcade.collide(this.rocket, this.sixmeteoor, this.deadHandler, null, this);
     }
+
+    //sprite frame raket
     if(!dead) {
       this.rocket.frame = 0;
     } else {
       this.rocket.frame = 3;
     }
 
+    //movement
     if(this.cursors.left.isDown && !dead) {
         this.rocket.body.velocity.x += -10;
         this.rocket.frame = 1;
@@ -135,6 +162,7 @@ export default class Play extends Phaser.State {
         this.rocket.frame = 2;
     }
     if(planeet) {
+      //landen op platform
       this.game.physics.arcade.collide(this.rocket, this.platform, this.geland, null, this);
 
       if(this.cursors.up.isDown && !dead) {
@@ -151,7 +179,6 @@ export default class Play extends Phaser.State {
     this.rocket.angle = bank * 5;
 
     // Fire
-
     fire = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     if (fire.isDown) {
         this.fireBullet();
@@ -174,6 +201,9 @@ export default class Play extends Phaser.State {
      }
     }
 
+    //bolletjes genereren
+    //first run maakt ze
+    //erna worden ze van onder het scherm terug naar bovenaan geplaatst
     generateMeteoor() {
     this.meteoorY = this.game.rnd.integerInRange(0, 700);
     if(this.firstrun) {

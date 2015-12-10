@@ -5,24 +5,31 @@ import Space from '../objects/Space';
 let timer = 3, countDownText, timerEvent, countdown;
 
 export default class Intro extends Phaser.State {
+
   create() {
+    //toon bg
     this.bg = new Background(this.game, 0, 0, 700, 700);
     this.game.add.existing(this.bg);
 
+    //toon bg planeten
     this.space = new Space(this.game, 0, 0, 700, 700);
     this.game.add.existing(this.space);
 
+    //toon raket
     this.rocket = new Rocket(this.game, 350, 600);
     this.game.add.existing(this.rocket);
 
+    //toon startknop
     this.startButton = this.game.add.button(350, 500, 'start', this.goClick, this);
     this.startButton.anchor.setTo(0.5,0.5);
   }
-  goClick() {
 
+  //geduwt op startknop
+  goClick() {
+        //verwijder startknop
         this.startButton.destroy();
 
-
+        //countdown om te starten
         let countdown = this.game.add.audio('countdown');
         countdown.onStop.add(this.soundStopped, this);
         countdown.play();
@@ -35,10 +42,11 @@ export default class Intro extends Phaser.State {
         countDownText.scale.pageAlignHorizontally = true;
         countDownText.anchor.setTo(0.5, 0);
         countDownText.x = this.game.width/2;
-
+        //countdown animatie
         this.game.add.tween(countDownText).to( { y: 245 }, 2400, Phaser.Easing.Bounce.Out, true);
     }
 
+    //tekst bepalen van de timer
     updateTimer() {
         timer -= 1;
         if (timer === 0) {
@@ -48,16 +56,12 @@ export default class Intro extends Phaser.State {
             countDownText.setText(timer);
         }
         if (timer < 0) {
-
-      this.game.time.events.remove(timerEvent);
-            this.game.state.start('Play');
-
-
+          this.game.time.events.remove(timerEvent);
+          this.game.state.start('Play');
         }
     }
 
     soundStopped(sound) {
-
-
+      //geen uitvoer
     }
 }
