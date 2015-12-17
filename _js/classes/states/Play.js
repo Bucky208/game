@@ -104,6 +104,7 @@ export default class Play extends Phaser.State {
       this.game.add.tween(this.firstmeteoor).to({y: 800}, 800, Phaser.Easing.Quadratic.InOut, true);
       this.game.add.tween(this.secondmeteoor).to({y: 800}, 800, Phaser.Easing.Quadratic.InOut, true);
       this.game.add.tween(this.thirdmeteoor).to({y: 800}, 800, Phaser.Easing.Quadratic.InOut, true);
+      this.game.add.tween(this.fuel).to({y: 800}, 800, Phaser.Easing.Quadratic.InOut, true);
       this.game.add.tween(this.fourthmeteoor).to({y: 800}, 800, Phaser.Easing.Quadratic.InOut, true);
       this.game.add.tween(this.fivehmeteoor).to({y: 800}, 800, Phaser.Easing.Quadratic.InOut, true);
       this.game.add.tween(this.sixmeteoor).to({y: 800}, 800, Phaser.Easing.Quadratic.InOut, true);
@@ -122,6 +123,9 @@ export default class Play extends Phaser.State {
   }
 
   landing () {
+    planeet = false;
+    dead = false;
+    bg = true;
     //we gaan naar de planeet modus
     this.game.state.start('Landing');
   }
@@ -142,11 +146,16 @@ export default class Play extends Phaser.State {
   }
 
   update() {
+    //fix
+    this.rocket.body.y = 600;
+
     //fuel verminderen
-    fuelamount -= 0.05
+    fuelamount -= 0.08;
     fueltext = strfuel + fuelamount;
     fuel.setText(fueltext);
-
+    if(fuelamount < 0) {
+      this.deadHandler();
+    }
 
     //achtergrond weg doen bij het starten
     if(bg) {
@@ -179,13 +188,22 @@ export default class Play extends Phaser.State {
 
     //movement
     if(this.cursors.left.isDown && !dead) {
-        this.rocket.body.velocity.x += -10;
+        if(this.game.boosts) {
+          this.rocket.body.velocity.x += -7;
+        } else {
+          this.rocket.body.velocity.x += -10;
+        }
         this.rocket.frame = 1;
     }
     if(this.cursors.right.isDown && !dead){
-        this.rocket.body.velocity.x += 10;
+        if(this.game.boosts) {
+          this.rocket.body.velocity.x += 7;
+        } else {
+          this.rocket.body.velocity.x += 10;
+        }
         this.rocket.frame = 2;
     }
+
     if(planeet) {
       //landen op platform
       this.game.physics.arcade.collide(this.rocket, this.platform, this.geland, null, this);
@@ -268,6 +286,9 @@ export default class Play extends Phaser.State {
         this.fourthmeteoor.y = -10;
       } else if(this.currentmeteoor == 4) {
         this.fivehmeteoor.y = -10;
+        if(!this.firstrun) {
+          this.gimmeFuel();
+        }
       } else if(this.currentmeteoor == 5) {
         this.sixmeteoor.y = -10;
         this.currentmeteoor = -1;
@@ -282,7 +303,8 @@ export default class Play extends Phaser.State {
   }
 
   fuelHandler() {
-    this.fuel.kill();
-    fuelamount += 50;
+    this.rocket.body.velocity.x = 0;
+    this.fuel.destroy();
+    fuelamount += 30;
   }
 }
