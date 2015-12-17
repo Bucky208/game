@@ -8,7 +8,7 @@ export default class Meteoor extends Phaser.Sprite {
     this.body.allowGravity = false;
     this.body.immovable = true;
 
-    this.body.velocity.y= 140;
+    this.body.velocity.y= this.game.speed;
 
   }
 }

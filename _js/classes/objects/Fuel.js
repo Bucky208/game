@@ -6,9 +6,9 @@ export default class Fuel extends Phaser.Sprite {
     this.game.physics.arcade.enableBody(this);
 
     this.body.allowGravity = false;
-    this.body.immovable = true;
+    this.body.immovable = false;
 
-    this.body.velocity.y= 140;
+    this.body.velocity.y= this.game.speed;
 
   }
 }

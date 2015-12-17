@@ -60,6 +60,8 @@ export default class Landing extends Phaser.State {
   }
 
   nextUpdate() {
+    this.game.speed += 50;
+    console.log(this.game.speed);
     this.game.state.start('Upgrade');
   }
 

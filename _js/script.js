@@ -19,6 +19,7 @@ const init = () => {
   game.state.add('Upgrade', Upgrade, false);
   game.state.add('Countdown', Countdown, false);
   game.state.start('Preload');
+  game.speed = 140;
 };
 
 init();

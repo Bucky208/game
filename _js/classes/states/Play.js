@@ -1,12 +1,13 @@
 import Background from '../objects/Background';
 import Space from '../objects/Space';
 import Meteoor from '../objects/Meteoor';
+import Fuel from '../objects/Fuel';
 
-let dead = false, bg = true, planeet = false;
+let dead = false, bg = true, planeet = false, fueltext, strfuel, fuel, style;
 let bank,
     bullets,
     fire,
-    limitFire = 0;
+    limitFire = 0, fuelamount;
 
 export default class Play extends Phaser.State {
   create() {
@@ -23,9 +24,13 @@ export default class Play extends Phaser.State {
     this.game.add.existing(this.space);
     //this.space.autoScroll(0,200);
 
+    //fuel
+    fuelamount = 100;
+
     //de raket
     if(this.game.boosts) {
       this.rocket = this.game.add.sprite(350, 600, 'raketboosted');
+      fuelamount = 150;
     } else {
       this.rocket = this.game.add.sprite(350, 600, 'raket');
     }
@@ -37,7 +42,7 @@ export default class Play extends Phaser.State {
     this.meteoorGenerator.timer.start();
 
     //voltooien van de basics
-    this.game.time.events.add(Phaser.Timer.SECOND * 10, this.showPlaneet, this);
+    this.game.time.events.add(Phaser.Timer.SECOND * 20, this.showPlaneet, this);
 
     //parameters
     this.currentmeteoor = 0;
@@ -55,6 +60,16 @@ export default class Play extends Phaser.State {
     bullets.setAll('anchor.y', 1);
     bullets.setAll('outOfBoundsKill', true);
     bullets.setAll('checkWorldBounds', true);
+
+    //fuel
+    strfuel = "Fuel: ";
+    fueltext = strfuel + fuelamount;
+    style = {
+          font: '20px Helvetica',
+          fill: '#FFFFFF',
+          align: 'center'
+      };
+    fuel = this.game.add.text(610, 5, fueltext, style);
   }
 
   showPlaneet() {
@@ -94,12 +109,11 @@ export default class Play extends Phaser.State {
       this.game.add.tween(this.sixmeteoor).to({y: 800}, 800, Phaser.Easing.Quadratic.InOut, true);
 
       //platform animatie loop
-      var knipper = this.platform.animations.add('knipper');
+      let knipper = this.platform.animations.add('knipper');
       this.platform.animations.play('knipper', 2, true);
 
       //movement
       this.game.physics.arcade.enableBody(this.planeet);
-
 
       //event binnen 1 sec
       planeet = true;
@@ -128,6 +142,12 @@ export default class Play extends Phaser.State {
   }
 
   update() {
+    //fuel verminderen
+    fuelamount -= 0.05
+    fueltext = strfuel + fuelamount;
+    fuel.setText(fueltext);
+
+
     //achtergrond weg doen bij het starten
     if(bg) {
       this.space.body.y += 5;
@@ -147,6 +167,7 @@ export default class Play extends Phaser.State {
       this.game.physics.arcade.collide(this.rocket, this.fourthmeteoor, this.deadHandler, null, this);
       this.game.physics.arcade.collide(this.rocket, this.fivehmeteoor, this.deadHandler, null, this);
       this.game.physics.arcade.collide(this.rocket, this.sixmeteoor, this.deadHandler, null, this);
+      this.game.physics.arcade.collide(this.rocket, this.fuel, this.fuelHandler, null, this);
     }
 
     //sprite frame raket
@@ -229,6 +250,7 @@ export default class Play extends Phaser.State {
       } else if(this.currentmeteoor == 4) {
         this.fivehmeteoor = new Meteoor(this.game, this.meteoorY, -10, this.color);
         this.game.add.existing(this.fivehmeteoor);
+        this.gimmeFuel();
       } else if(this.currentmeteoor == 5) {
         this.sixmeteoor = new Meteoor(this.game, this.meteoorY, -10, this.color);
         this.game.add.existing(this.sixmeteoor);
@@ -251,5 +273,16 @@ export default class Play extends Phaser.State {
         this.currentmeteoor = -1;
       }
       this.currentmeteoor++;
+  }
+
+  gimmeFuel() {
+    this.fuelY = this.game.rnd.integerInRange(0, 700);
+    this.fuel = new Fuel(this.game, this.fuelY, -10);
+    this.game.add.existing(this.fuel);
+  }
+
+  fuelHandler() {
+    this.fuel.kill();
+    fuelamount += 50;
   }
 }
