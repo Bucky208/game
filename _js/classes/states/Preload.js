@@ -6,6 +6,7 @@ export default class Preload extends Phaser.State {
     //alle assets preloaden
     //images
     this.load.image('start', 'assets/start.png');
+    this.load.image('ok', 'assets/ok.png');
     this.load.image('meteoor', 'assets/meteoorklein.png');
     this.load.image('background_overlay', 'assets/bgoverlay.png');
     this.load.image('background', 'assets/bg.png');
@@ -13,6 +14,9 @@ export default class Preload extends Phaser.State {
     this.load.image('bullet', 'assets/bullet.png');
     this.load.image('update', 'assets/update.png');
     this.load.image('noupdate', 'assets/noupdate.png');
+    this.load.image('fuel', 'assets/fuel.png');
+    this.load.image('intro', 'assets/intro.png');
+    this.load.image('introadv', 'assets/intro2.png');
 
     //spritesheets
     this.load.spritesheet('planeet', 'assets/planeet.png', 545, 386, 1);
