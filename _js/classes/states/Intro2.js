@@ -3,7 +3,6 @@ import Rocket from '../objects/Rocket';
 import Space from '../objects/Space';
 import Uitleg from '../objects/Uitleg';
 
-
 export default class Intro extends Phaser.State {
 
   create() {
@@ -20,7 +19,7 @@ export default class Intro extends Phaser.State {
     this.game.add.existing(this.rocket);
 
     //toon uitleg
-    this.uitleg = new Uitleg(this.game, 350, 250, 400, 400, 'intro');
+    this.uitleg = new Uitleg(this.game, 350, 250, 400, 276, 'introadv');
     this.game.add.existing(this.uitleg);
 
     //toon startknop
@@ -30,6 +29,6 @@ export default class Intro extends Phaser.State {
 
   //geduwt op startknop
   goClick() {
-    this.game.state.start('Intro2');
+    this.game.state.start('Countdown');
   }
 }
