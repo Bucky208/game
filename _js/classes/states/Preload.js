@@ -28,6 +28,7 @@ export default class Preload extends Phaser.State {
     this.load.spritesheet('platform', 'assets/platform.png', 50, 8);
 
     //audio
+    this.load.audio('bgsound', 'assets/sounds/bgsound.mp3');
     this.load.audio('rocket_launch', 'assets/sounds/launch.mp3');
     this.load.audio('countdown', 'assets/sounds/countdown.mp3');
 

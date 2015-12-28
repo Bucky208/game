@@ -9,11 +9,14 @@ let dead = false,
     fueltext, strfuel, fuel, style;
 let bank,
     bullets,
+    bullet,
+    meteos,
     fire,
     limitFire = 0,
     fuelamount,
     lives;
 let fuelLevel, rockets;
+
 
 export default class Play extends Phaser.State {
     create() {
@@ -46,9 +49,14 @@ export default class Play extends Phaser.State {
         this.rocket.anchor.setTo(0.5, 0.5);
         this.game.physics.arcade.enableBody(this.rocket);
 
+        //meteoren
+        meteos = this.game.add.group();
+        meteos.enableBody = true;
+        meteos.physicsBodyType = Phaser.Physics.ARCADE;
+
         //meteoren op het scherm plaatsen > itemer
-        this.meteoorGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 1, this.generateMeteoor, this);
-        this.meteoorGenerator.timer.start();
+        //this.meteoorGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 1, this.generateMeteoor, this);
+        //this.meteoorGenerator.timer.start();
 
         //voltooien van de basics
         this.game.time.events.add(Phaser.Timer.SECOND * 20, this.showPlaneet, this);
@@ -81,15 +89,23 @@ export default class Play extends Phaser.State {
         fuel = this.game.add.text(610, 5, fueltext, style);
 
         rockets = this.game.add.group();
-
-
     }
 
+    goodbye(obj) {
+       obj.destroy();
+       this.spawnMetoor();
+    }
+
+    spawnMetoor() {
+      var c = meteos.create(this.game.world.randomX, -10, 'meteoor', this.game.rnd.integerInRange(0, 36));
+      //c.name = 'meteoor' + i;
+      c.body.immovable = true;
+      c.body.velocity.y= this.game.speed;
+      c.events.onOutOfBounds.add( this.goodbye, this );
+      c.checkWorldBounds = true;
+    }
 
     showPlaneet() {
-
-
-
 
         //als de user dood is doe niets extra meer
         if (!dead) {
@@ -299,16 +315,9 @@ export default class Play extends Phaser.State {
         }
 
         // check for impact
-
-        this.game.physics.arcade.collide(this.firstmeteoor, bullets, this.hitEnemy, null, this);
-        this.game.physics.arcade.collide(this.secondmeteoor, bullets, this.hitEnemy, null, this);
-        this.game.physics.arcade.collide(this.thirdmeteoor, bullets, this.hitEnemy, null, this);
-        this.game.physics.arcade.collide(this.fourthmeteoor, bullets, this.hitEnemy, null, this);
-        this.game.physics.arcade.collide(this.sixmeteoor, bullets, this.hitEnemy, null, this);
-        this.game.physics.arcade.collide(this.fivehmeteoor, bullets, this.hitEnemy, null, this);
+        this.game.physics.arcade.overlap(bullets, meteos, this.collisionHandler, null, this);
 
         // load fuel
-
         this.fuelBar(fuelamount);
 
         // show aantal levens
@@ -319,14 +328,18 @@ export default class Play extends Phaser.State {
         rockets.scale.set(0.5,0.5);
     }
 
+    collisionHandler (bullet, met) {
+
+        bullet.kill();
+        met.destroy();
+        this.spawnMetoor();
+    }
+
    hitEnemy(enemy, bullet) {
-
-    enemy.revive();
-    bullet.kill();
-    this.generateMeteoor();
-}
-
-
+      enemy.revive();
+      bullet.kill();
+      this.generateMeteoor();
+  }
 
     // Schiet bullets af
     fireBullet() {
