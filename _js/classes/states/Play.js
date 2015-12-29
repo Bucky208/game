@@ -198,6 +198,7 @@ export default class Play extends Phaser.State {
     //collisions
     if (!planeet) {
       this.game.physics.arcade.collide(this.rocket, this.fuel, this.fuelHandler, null, this);
+      this.game.physics.arcade.collide(this.rocket, meteos, this.deadHandler, null, this);
     }
     //sprite frame raket
     if (dead) {
@@ -235,7 +236,7 @@ export default class Play extends Phaser.State {
     // zijwaards roteer effect
     bank = this.rocket.body.velocity.x / 400;
     this.rocket.scale.x = 1 - Math.abs(bank) / 2;
-    this.rocket.angle = bank * 5;
+    this.rocket.angle = bank;
     // Fire
     fire = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     if (fire.isDown) {

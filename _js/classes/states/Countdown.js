@@ -23,6 +23,7 @@ export default class Countdown extends Phaser.State {
 
   //geduwt op startknop
   goClick() {
+    timer = 3;
     //verwijder startknop
     this.startButton.destroy();
     //countdown om te starten
