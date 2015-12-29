@@ -1,4 +1,5 @@
 'use strict';
+
 import Preload from './classes/states/Preload';
 import Intro from './classes/states/Intro';
 import Intro2 from './classes/states/Intro2';
