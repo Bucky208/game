@@ -5,6 +5,7 @@
   "author": "Maxim De Groote",
   "scripts": {
     "development": "webpack --watch & npm run serve",
+    "watch": "webpack --watch & npm run serve",
     "production": "webpack -d -p",
     "serve": "python -m SimpleHTTPServer"
   },

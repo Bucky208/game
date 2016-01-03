@@ -11,7 +11,27 @@ export default class GameOver extends Phaser.State {
     localStorage.setItem('save', JSON.stringify(saveScore));
     this.deadButton = this.game.add.button(350, 500, 'gameover', this.restart, this);
     this.deadButton.anchor.setTo(0.5, 0.5);
+
+    this.loadItems();
   }
+
+  loadItems() {
+    let req = new XMLHttpRequest();
+    req.responseType = 'json';
+    req.onload = () => {
+      if(!req.response || req.response.length === 0) {
+       console.log("No Items In Database");
+        return;
+      }
+      req.response.forEach(item => {
+        console.log(`id: ${item.id} - name: ${item.name} - score: ${item.score}`);
+      });
+    };
+    let url = `index.php?t=${Date.now()}`;
+    req.open('get', url, true);
+    req.setRequestHeader('X_REQUESTED_WITH', 'xmlhttprequest');
+    req.send();
+  };
 
   restart() {
     this.game.state.start('Play', true, false);

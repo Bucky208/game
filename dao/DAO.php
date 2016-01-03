@@ -1,9 +1,9 @@
 <?php
 class DAO {
-	private static $dbHost = "mysql";
-	private static $dbName = "h_highscores";
-	private static $dbUser = "mrtn_usr";
-	private static $dbPass = "test123$";
+	private static $dbHost = "localhost";
+	private static $dbName = "highscores";
+	private static $dbUser = "root";
+	private static $dbPass = "root";
 	private static $sharedPDO;
 
 

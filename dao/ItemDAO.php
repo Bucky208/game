@@ -3,7 +3,7 @@ require_once __DIR__ . '/DAO.php';
 class ItemDAO extends DAO {
 
 	public function selectAll() {
-		$sql = "SELECT * FROM `highscores`";
+		$sql = "SELECT * FROM `scores`";
 		$stmt = $this->pdo->prepare($sql);
 		$stmt->execute();
 		return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -12,7 +12,7 @@ class ItemDAO extends DAO {
 	public function insert($data) {
 		$errors = $this->getValidationErrors($data);
 		if(empty($errors)) {
-			$sql = "INSERT INTO `highscores` (`name`, `score`) VALUES (:name, :score)";
+			$sql = "INSERT INTO `scores` (`name`, `score`) VALUES (:name, :score)";
 			$stmt = $this->pdo->prepare($sql);
 			$stmt->bindValue(':name', $data['name']);
 			$stmt->bindValue(':score', $data['score']);
@@ -25,7 +25,7 @@ class ItemDAO extends DAO {
 	}
 
 	public function delete($id) {
-		$sql = "DELETE FROM `highscores` WHERE `id` = :id";
+		$sql = "DELETE FROM `scores` WHERE `id` = :id";
 		$stmt = $this->pdo->prepare($sql);
 		$stmt->bindValue(':id', $id);
 		return $stmt->execute();

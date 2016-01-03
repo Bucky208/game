@@ -24,7 +24,7 @@ export default class Play extends Phaser.State {
     this.space = new Space(this.game, 0, 0, 700, 700);
     this.game.add.existing(this.space);
     //fuel
-    fuelamount = 100;
+    fuelamount = 50;
     //de raket
     if (this.game.boosts) {
       this.rocket = this.game.add.sprite(350, 600, 'raketboosted');
