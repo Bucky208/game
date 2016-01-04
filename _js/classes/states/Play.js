@@ -41,6 +41,9 @@ export default class Play extends Phaser.State {
     //meteoren op het scherm plaatsen > itemer
     this.meteoorGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 1, this.spawnMetoor, this);
     this.meteoorGenerator.timer.start();
+    //score timer
+    this.scoreAdder = this.game.time.events.loop(Phaser.Timer.SECOND * 1, this.addScore, this);
+    this.scoreAdder.timer.start();
     //voltooien van de basics
     this.game.time.events.add(Phaser.Timer.SECOND * 20, this.showPlaneet, this);
     //parameters
@@ -80,6 +83,10 @@ export default class Play extends Phaser.State {
     c.body.velocity.y = this.game.speed;
     c.events.onOutOfBounds.add(this.goodbye, this);
     c.checkWorldBounds = true;
+  }
+
+  addScore() {
+    this.game.score++;
   }
 
   showPlaneet() {
@@ -146,6 +153,7 @@ export default class Play extends Phaser.State {
     }
     if (lives === 1) {
       dead = true;
+      this.scoreAdder.timer.stop();
       this.restart();
       this.game.state.start('GameOver');
     } else {
@@ -163,7 +171,8 @@ export default class Play extends Phaser.State {
     dead = false;
     bg = true;
     planeet = false;
-    this.game.state.start('Play');
+    this.game.score = 0;
+    //this.game.state.start('Play');
   }
 
   // Render FuelBar
@@ -263,6 +272,7 @@ export default class Play extends Phaser.State {
     if (this.game.time.now > limitFire) {
       let bullet = bullets.getFirstExists(false);
       if (bullet) {
+        this.game.score -= 0.1;
         let bulletOffset = 20 * Math.sin(this.game.math.degToRad(this.rocket.angle));
         bullet.reset(this.rocket.x + bulletOffset, this.rocket.y - 35);
         bullet.angle = this.rocket.angle;

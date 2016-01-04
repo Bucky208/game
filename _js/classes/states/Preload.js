@@ -27,6 +27,7 @@ export default class Preload extends Phaser.State {
     this.load.audio('countdown', 'assets/sounds/countdown.mp3');
     //vars
     this.game.boosts = false;
+    this.game.score = 0;
   }
 
   create() {}

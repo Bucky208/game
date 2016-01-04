@@ -20,27 +20,19 @@ class ItemsController extends Controller {
       exit();
     }
     $this->set('items', $items);
-	}  
+	}
 
   private function _processAddItemFormIfNeeded() {
-    if(!empty($_POST['action']) && $_POST['action'] == 'add-item') {
+      //var_dump($_POST);
+      //$data = array_merge($_POST, array('created' => date('Y-m-d H:i:s')));
+
+          //$result = $this->itemDAO->insert($data);
+
+    if(!empty($_POST)) {
       $data = array_merge($_POST, array('created' => date('Y-m-d H:i:s')));
-      if($result = $this->itemDAO->insert($data)) {
-        if($this->isAjax) {
+      $result = $this->itemDAO->insert($data);
           header('Content-Type: application/json');
           echo json_encode(array('result' => 'ok', 'inserted_id' => $result));
-          exit();
-        }
-        $this->redirect('index.php');
-      } else {
-        $errors = $this->itemDAO->getValidationErrors($data);
-        if($this->isAjax) {
-          header('Content-Type: application/json');
-          echo json_encode(array('result' => 'error', 'errors' => $errors));
-          exit();
-        }
-        $this->set('errors', $errors);
-      }
     }
   }
 
